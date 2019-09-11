@@ -47,9 +47,6 @@
 # Embedded web-server pid file
 /.web-server-pid
 
-# Symfony framework bundle
-.env
-
 
 # Webpack encore pack
 /public/build/
