@@ -19,10 +19,10 @@ use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\OrderFilter;
  *
  * @ApiResource
  * @ApiFilter(DateFilter::class, properties={"publicationDate": DateFilter::EXCLUDE_NULL})
- * @ApiFilter(SearchFilter::class, properties={"body": "ipartial", "author": "ipartial", "book": "exact"})
+ * @ApiFilter(SearchFilter::class, properties={"body": "ipartial", "author": "ipartial", "book": "exact", "book.isbn": "exact", "book.author": "partial", "book.title": "partial"})
  * @ApiFilter(NumericFilter::class, properties={"rating"})
  * @ApiFilter(RangeFilter::class, properties={"rating"})
- * @ApiFilter(OrderFilter::class, properties={"id", "rating", "author", "publicationDate"}, arguments={"orderParameterName"="order"})
+ * @ApiFilter(OrderFilter::class, properties={"id", "rating", "author", "publicationDate", "book.id", "book.author", "book.publicationDate"}, arguments={"orderParameterName"="order"})
  */
 class Review
 {
