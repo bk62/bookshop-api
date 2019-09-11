@@ -5,6 +5,12 @@ namespace App\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use ApiPlatform\Core\Annotation\ApiResource;
 use Symfony\Component\Validator\Constraints as Assert;
+use ApiPlatform\Core\Annotation\ApiFilter;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\DateFilter;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\NumericFilter;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\RangeFilter;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\OrderFilter;
 
 /**
  * A review of a book
@@ -12,6 +18,11 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @ORM\Entity
  *
  * @ApiResource
+ * @ApiFilter(DateFilter::class, properties={"publicationDate": DateFilter::EXCLUDE_NULL})
+ * @ApiFilter(SearchFilter::class, properties={"body": "ipartial", "author": "ipartial", "book": "exact"})
+ * @ApiFilter(NumericFilter::class, properties={"rating"})
+ * @ApiFilter(RangeFilter::class, properties={"rating"})
+ * @ApiFilter(OrderFilter::class, properties={"id", "rating", "author", "publicationDate"}, arguments={"orderParameterName"="order"})
  */
 class Review
 {

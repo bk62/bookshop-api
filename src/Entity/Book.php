@@ -6,6 +6,10 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use ApiPlatform\Core\Annotation\ApiResource;
 use Symfony\Component\Validator\Constraints as Assert;
+use ApiPlatform\Core\Annotation\ApiFilter;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\DateFilter;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\OrderFilter;
 
 /**
  * A book
@@ -13,6 +17,9 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @ORM\Entity
  *
  * @ApiResource
+ * @ApiFilter(DateFilter::class, properties={"publicationDate": DateFilter::EXCLUDE_NULL})
+ * @ApiFilter(SearchFilter::class, properties={"isbn": "exact", "title": "ipartial", "description": "ipartial", "author": "ipartial"})
+ * @ApiFilter(OrderFilter::class, properties={"id", "isbn", "author", "title", "publicationDate"}, arguments={"orderParameterName"="order"})
  */
 class Book
 {
