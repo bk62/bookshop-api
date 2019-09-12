@@ -1,0 +1,51 @@
+# Types for properties from schema.org
+types:
+  # Book and review authors
+  Person:
+    properties:
+      familyName: ~
+      givenName:  ~
+      additionalName: ~
+      books: { range: Book, cardinality: "(0..*)" }
+      reviews: { range: Review, cardinality: "(0..*)" }
+  # Publishers
+  Organization:
+    properties:
+      name: ~
+      books: { range: Book, cardinality: "(0..*)" }
+  # Hardcover, audiobook etc
+  BookFormatType:
+    properties:
+      name: ~
+  # Book - TODO only one author currently
+  Book:
+    properties:
+      name: ~
+      bookEdition: ~
+      bookFormat: ~
+      isbn: ~
+      author: { range: Person, cardinality: "(1..*)" }
+      datePublished: ~
+      genre: { range: "Text" }
+      inLanguage: ~
+      keywords: ~
+      publisher: { range: Organization }
+      reviews: { range: Review, cardinality: "(0..*)" }
+      thumbnailUrl: ~
+  Review:
+    properties:
+      itemReviewed: { range: Book, cardinality: "(1..1)" }
+      reviewBody: ~
+      reviewRating: { range: "Number" }
+      author: { range: Person, cardinality: "(1..*)" }
+      datePublished: ~
+      inLanguage: ~
+      keywords: ~
+      publisher: { range: Organization, cardinality: "(1..1)" }
+      text: ~
+      version: { range: "Number" }
+
+
+
+
+
