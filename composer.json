@@ -13,6 +13,7 @@
         "symfony/yaml": "4.3.*"
     },
     "require-dev": {
+        "api-platform/schema-generator": "^2.1",
         "symfony/web-server-bundle": "4.3.*"
     },
     "config": {
