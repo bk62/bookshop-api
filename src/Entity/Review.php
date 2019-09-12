@@ -10,6 +10,12 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
+use ApiPlatform\Core\Annotation\ApiFilter;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\DateFilter;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\NumericFilter;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\RangeFilter;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\OrderFilter;
 
 /**
  * A review of an item - for example, of a restaurant, movie, or store.
@@ -18,6 +24,18 @@ use Symfony\Component\Validator\Constraints as Assert;
  *
  * @ORM\Entity
  * @ApiResource(iri="http://schema.org/Review")
+ * @ApiFilter(DateFilter::class, properties={"datePublished": DateFilter::EXCLUDE_NULL})
+ * @ApiFilter(SearchFilter::class, properties={
+ *     "author": "ipartial",
+ *     "itemReviewed": "exact",
+ *     "itemReviewed.isbn": "exact",
+ *     "itemReviewed.name": "ipartial"
+ * })
+ * @ApiFilter(NumericFilter::class, properties={"reviewRating"})
+ * @ApiFilter(RangeFilter::class, properties={"reviewRating"})
+ * @ApiFilter(OrderFilter::class, properties={
+ *     "id", "datePublished", "itemReviewed.id", "itemReviewed.datePublished"
+ * }, arguments={"orderParameterName"="order"})
  */
 class Review
 {
@@ -51,8 +69,9 @@ class Review
     /**
      * @var float|null The rating given in this review. Note that reviews can themselves be rated. The ```reviewRating``` applies to rating given by the review. The \[\[aggregateRating\]\] property applies to the review itself, as a creative work.
      *
-     * @ORM\Column(type="float", nullable=true)
+     * @ORM\Column(type="smallint", nullable=true)
      * @ApiProperty(iri="http://schema.org/reviewRating")
+     * @Assert\Range(min=0, max=5)
      */
     private $reviewRating;
 
@@ -106,6 +125,7 @@ class Review
      *
      * @ORM\Column(type="text", nullable=true)
      * @ApiProperty(iri="http://schema.org/text")
+     * @Assert\NotBlank
      */
     private $text;
 

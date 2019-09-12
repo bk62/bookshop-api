@@ -11,6 +11,10 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
+use ApiPlatform\Core\Annotation\ApiFilter;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\DateFilter;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\OrderFilter;
 
 /**
  * A book.
@@ -19,6 +23,18 @@ use Symfony\Component\Validator\Constraints as Assert;
  *
  * @ORM\Entity
  * @ApiResource(iri="http://schema.org/Book")
+ * @ApiFilter(DateFilter::class, properties={"datePublished": DateFilter::EXCLUDE_NULL})
+ * @ApiFilter(SearchFilter::class, properties={
+ *     "isbn": "exact",
+ *     "name": "ipartial",
+ *     "genre": "ipartial",
+ *     "keywords": "ipartial",
+ *     "authors.givenName": "ipartial",
+ *     "authors.familyName": "ipartial"
+ * })
+ * @ApiFilter(OrderFilter::class, properties={
+ *     "id", "isbn", "datePublished"
+ *  }, arguments={"orderParameterName"="order"})
  */
 class Book
 {
@@ -36,6 +52,7 @@ class Book
      *
      * @ORM\Column(type="text", nullable=true)
      * @ApiProperty(iri="http://schema.org/name")
+     * @Assert\NotBlank
      */
     private $name;
 
@@ -61,6 +78,7 @@ class Book
      *
      * @ORM\Column(type="text", nullable=true)
      * @ApiProperty(iri="http://schema.org/isbn")
+     * @Assert\Isbn
      */
     private $isbn;
 
