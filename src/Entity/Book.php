@@ -22,7 +22,18 @@ use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\OrderFilter;
  * @see http://schema.org/Book Documentation on Schema.org
  *
  * @ORM\Entity
- * @ApiResource(iri="http://schema.org/Book")
+ * @ApiResource(
+ *     iri="http://schema.org/Book",
+ *     collectionOperations={
+ *          "get",
+ *          "post"={"access_control"="is_authenticated()"}
+ *     },
+ *     itemOperations={
+ *          "get",
+ *          "put"={"access_control"="is_authenticated()"},
+ *          "delete"={"access_control"="is_authenticated()s"}
+ *     }
+ * )
  * @ApiFilter(DateFilter::class, properties={"datePublished": DateFilter::EXCLUDE_NULL})
  * @ApiFilter(SearchFilter::class, properties={
  *     "isbn": "exact",
